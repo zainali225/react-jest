@@ -1,8 +1,11 @@
-import { render, screen } from '@testing-library/react';
+import { render, screen, } from '@testing-react/library';
 import App from './App';
 
-test('renders learn react link', () => {
+test('show 6 products', async () => {
   render(<App />);
-  const linkElement = screen.getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+
+  const headings = await screen.findAllByRole('heading');
+  expect(headings).toHaveLength(6);
+
+
 });
