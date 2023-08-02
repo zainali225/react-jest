@@ -1,10 +1,10 @@
 import "./index.css";
-import ProductList from "./components/ProductList";
+import LoadProductsExample from "./examples/load_products"
+import UserFormExample from "./examples/user_form"
 
 export default function App() {
   return (
-    <div className="container mx-auto">
-      <ProductList />
-    </div>
+     
+      <UserFormExample /> 
   );
 }
