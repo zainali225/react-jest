@@ -2,6 +2,21 @@ import { render, screen, within } from "@testing-library/react";
 import user from "@testing-library/user-event";
 import UserForm from "./UserForm"
 import UserList from "./UserList"
+import App from "./"
+
+function renderComponentUserList() {
+
+    const users = [
+        { name: "zain", email: "zain@gmail.com" },
+        { name: "ali", email: "ali@gmail.com" },
+    ]
+
+
+    const { container } = render(<UserList users={users} />)
+
+    return { users, container }
+
+}
 
 test("UserForm | show to inputs and add button", async () => {
     render(<UserForm />);
@@ -60,15 +75,33 @@ test("UserForm | it calls onUserAdd on submit form", async () => {
 
 });
 
+test("User Form | it clear the inputs after submitting form", async () => {
+
+    render(<UserForm onUserAdd={() => { }} />)
+
+    const nameInput = screen.getByRole("textbox", { name: /enter name/i })
+    const emailInput = screen.getByRole("textbox", { name: /enter email/i })
+    const button = screen.getByRole("button", { name: /add user/i })
+
+    user.click(nameInput);
+    user.keyboard("zain")
+
+    user.click(emailInput);
+    user.keyboard("zain@gmail.com")
+
+    await user.click(button);
+
+    expect(nameInput).toHaveValue("");
+    expect(emailInput).toHaveValue("")
+
+})
+
 
 // user list
 
 test("UserList | it show correct number of rows", async () => {
 
-    const users = [
-        { name: "zain", email: "zain@gmail.com" },
-        { name: "ali", email: "ali@gmail.com" },
-    ]
+
 
 
     // 1st way using setting datatest-id in users list
@@ -79,7 +112,7 @@ test("UserList | it show correct number of rows", async () => {
 
     // 2nd way
 
-    const { container } = render(<UserList users={users} />);
+    const { container } = renderComponentUserList();
     const rows = container.querySelectorAll("tbody tr")
 
     expect(rows).toHaveLength(2)
@@ -91,13 +124,9 @@ test("UserList | it show correct number of rows", async () => {
 
 test("UserList | it show correct name & email", async () => {
 
-    const users = [
-        { name: "zain", email: "zain@gmail.com" },
-        { name: "ali", email: "ali@gmail.com" },
-    ]
 
+    const { users } = renderComponentUserList()
 
-    render(<UserList users={users} />)
 
     for (let user of users) {
 
@@ -112,3 +141,35 @@ test("UserList | it show correct name & email", async () => {
     // screen.logTestingPlaygroundURL()
 
 });
+
+
+test("User/App.js | it should work as expected", async () => {
+
+    render(<App />);
+
+    const nameInput = screen.getByRole("textbox", { name: /enter name/i })
+    const emailInput = screen.getByRole("textbox", { name: /enter email/i })
+
+    const button = screen.getByRole('button', { name: /add user/i })
+
+    user.click(nameInput);
+    user.keyboard("zain");
+
+    user.click(emailInput);
+    user.keyboard("zain@gmail.com");
+
+    await user.click(button);
+
+
+    // screen.debug()
+    // screen.logTestingPlaygroundURL()
+
+    const name = screen.getByRole("cell", { name: "zain" })
+    const email = screen.getByRole("cell", { name: "zain@gmail.com" })
+
+    expect(name).toBeInTheDocument()
+    expect(email).toBeInTheDocument()
+
+
+
+})
