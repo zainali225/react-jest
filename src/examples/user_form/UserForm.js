@@ -22,7 +22,7 @@ export default function UserForm({ onUserAdd }) {
                 <label htmlFor="email" >Enter Email</label>
                 <input id="email" value={email} onChange={e => setEmail(e.target.value)} />
             </div>
-            <button  >Add User</button>
+            <button aria-label="add user" >Add User</button>
         </form>
     )
 }

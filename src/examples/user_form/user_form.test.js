@@ -23,6 +23,9 @@ test("UserForm | show to inputs and add button", async () => {
 
     const inputs = screen.getAllByRole("textbox");
     const button = screen.getByRole("button");
+ 
+    // get button using area-label prop
+    // const button = screen.getByRole("button", { name: /submit/i })
 
     expect(inputs).toHaveLength(2);
     expect(button).toBeInTheDocument();
